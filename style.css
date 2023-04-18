@@ -18,7 +18,7 @@ header {
 h1 {
   color: #466995;
   font-family: "Oswald", sans-serif;
-  font-size: 22px;
+  font-size: 18px;
   font-weight: 300;
   text-transform: uppercase;
   margin: 5px;
@@ -52,7 +52,7 @@ h4 {
   letter-spacing: 2px;
   text-align: center;
   text-transform: uppercase;
-  margin: 15px;
+  margin: 5px;
 }
 
 h5 {
@@ -134,7 +134,7 @@ header h1 {
 
 .progress-bar {
   position: relative;
-  margin: 10px;
+  margin: 5px;
   left: 50%;
   width: 80px;
   height: 10px;
@@ -151,4 +151,30 @@ header h1 {
   border-radius: 5px;
   background-color: darkblue;
   width: 0%;
+}
+
+.nav-main {
+  margin-block-start: 5px;
+  margin-block-end: 5px;
+}
+
+.nav-main li {
+  list-style: none;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+nav ul ul {
+  display: none;
+}
+
+ul li ul {
+  position: fixed;
+  top: 25px; /* adjust as needed */
+  left: 145px;
+  display: none;
+  background-color: #fff;
+  z-index: 999;
+  padding: 10px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
 }

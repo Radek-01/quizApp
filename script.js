@@ -201,3 +201,31 @@ answerElements.forEach((answerEl) => {
     setTimeout(nextQuestion, 1000);
   });
 });
+
+//Section dealing with page navigation
+function toggleSubmenu(thisValue, event) {
+  // const subMenu = thisValue.querySelector("ul");
+  const subMenu = document.querySelector(".submenu");
+  if (subMenu.style.display === "block") {
+    subMenu.style.display = "none";
+  } else {
+    subMenu.style.display = "block";
+  }
+  event.stopPropagation();
+}
+
+const menuItems = document.querySelectorAll("nav ul li");
+for (var i = 0; i < menuItems.length; i++) {
+  if (menuItems[i].querySelector("ul")) {
+    menuItems[i].addEventListener("click", function (event) {
+      toggleSubmenu(this, event);
+    });
+  }
+}
+
+window.addEventListener("click", function (event) {
+  let submenu = document.querySelector(".submenu");
+  if (submenu.style.display === "block" && !submenu.contains(event.target)) {
+    submenu.style.display = "none";
+  }
+});
