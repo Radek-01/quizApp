@@ -1,8 +1,9 @@
 "use strict";
 
 class Quiz {
-  constructor(questions) {
-    this.quizData = questions;
+  constructor({ header, quizData }) {
+    this.quizHeader = header;
+    this.quizData = quizData;
     this.currentQuestion = 0;
     this.shuffledQuizData = this.shuffleData(this.quizData);
     this.lastAnswerCorrect = false;
@@ -47,5 +48,15 @@ class Quiz {
     }
     this.lastQuestion =
       this.currentQuestion + 1 === this.shuffledQuizData.length;
+  }
+  restartQuiz() {
+    this.currentQuestion = 0;
+    this.shuffledQuizData = this.shuffleData(this.quizData);
+    this.lastAnswerCorrect = false;
+    this.lastQuestion = false;
+    this.results.correctCount = 0;
+    this.results.incorrectCount = 0;
+    this.results.score = 0;
+    this.checkAnswer.lastQuestion = false;
   }
 }
