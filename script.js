@@ -226,7 +226,6 @@ const quizObjects = quizes.map((quizData) => {
 const quizSelectionItems = document.querySelectorAll(".quiz-sel-submenu li");
 const header_H1_El = document.querySelector(".welcome h1");
 const header_p_El = document.querySelector(".welcome p");
-const progressEl = document.querySelector(".progress");
 
 const resetSelection = () => {
   const answerElements = document.querySelectorAll('[class*="answer"]');
@@ -246,6 +245,7 @@ const displayQuizHeader = () => {
 
 const displayQuestion = (activeQuestion) => {
   resetSelection();
+  const progressEl = document.querySelector(".progress");
   const questionNoEl = document.querySelector(".question h4");
   const questionEl = document.querySelector(".question h2");
   questionNoEl.textContent = `Question ${
