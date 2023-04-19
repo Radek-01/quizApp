@@ -224,8 +224,6 @@ const quizObjects = quizes.map((quizData) => {
 });
 
 const quizSelectionItems = document.querySelectorAll(".quiz-sel-submenu li");
-const header_H1_El = document.querySelector(".welcome h1");
-const header_p_El = document.querySelector(".welcome p");
 
 const resetSelection = () => {
   const answerElements = document.querySelectorAll('[class*="answer"]');
@@ -239,6 +237,8 @@ const resetSelection = () => {
 };
 
 const displayQuizHeader = () => {
+  const header_H1_El = document.querySelector(".welcome h1");
+  const header_p_El = document.querySelector(".welcome p");
   header_H1_El.textContent = currentQuizObj.quizHeader.h1Text;
   header_p_El.textContent = currentQuizObj.quizHeader.pText;
 };
