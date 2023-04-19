@@ -1,103 +1,5 @@
 "use strict";
 
-// const quizData = [
-//   {
-//     question: "What is JavaScript?",
-//     answers: [
-//       "A programming language",
-//       "A markup language",
-//       "A scripting language",
-//       "All of the above",
-//     ],
-//     correctAnswer: "A programming language",
-//   },
-//   {
-//     question: "What is the syntax for creating a function in JavaScript?",
-//     answers: [
-//       "function = myFunction()",
-//       "function myFunction()",
-//       "function:myFunction()",
-//       "myFunction = function()",
-//     ],
-//     correctAnswer: "function myFunction()",
-//   },
-//   {
-//     question: "What is the DOM?",
-//     answers: [
-//       "Document Object Model",
-//       "Desktop Object Model",
-//       "Database Object Model",
-//       "None of the above",
-//     ],
-//     correctAnswer: "Document Object Model",
-//   },
-//   {
-//     question: "What does the 'this' keyword refer to in JavaScript?",
-//     answers: [
-//       "The current function",
-//       "The global object",
-//       "The object that owns the current function",
-//       "The object that is currently being created",
-//     ],
-//     correctAnswer: "The object that owns the current function",
-//   },
-//   {
-//     question: "What is an example of a JavaScript data type?",
-//     answers: ["String", "Boolean", "Number", "All of the above"],
-//     correctAnswer: "All of the above",
-//   },
-//   {
-//     question: "What is the purpose of an if/else statement in JavaScript?",
-//     answers: [
-//       "To execute a block of code if a condition is true",
-//       "To execute a block of code if a condition is false",
-//       "To execute a block of code regardless of the condition",
-//       "To assign a value to a variable",
-//     ],
-//     correctAnswer: "To execute a block of code if a condition is true",
-//   },
-//   {
-//     question: "What is a JavaScript array?",
-//     answers: [
-//       "A collection of objects",
-//       "A collection of strings",
-//       "A collection of variables",
-//       "A collection of data types",
-//     ],
-//     correctAnswer: "A collection of data types",
-//   },
-//   {
-//     question: "What is a JavaScript loop?",
-//     answers: [
-//       "A way to execute code repeatedly",
-//       "A way to add elements to an array",
-//       "A way to create variables",
-//       "A way to execute code conditionally",
-//     ],
-//     correctAnswer: "A way to execute code repeatedly",
-//   },
-//   {
-//     question: "What is an example of a JavaScript event?",
-//     answers: [
-//       "Clicking a button",
-//       "Typing in a form",
-//       "Scrolling a page",
-//       "All of the above",
-//     ],
-//     correctAnswer: "All of the above",
-//   },
-//   {
-//     question: "What is a JavaScript object?",
-//     answers: [
-//       "A function",
-//       "A data type",
-//       "A collection of properties",
-//       "A loop",
-//     ],
-//     correctAnswer: "A collection of properties",
-//   },
-// ];
-
 const javascriptQuiz = {
   header: {
     h1Text: "Check your javascript knowledge",
@@ -321,9 +223,6 @@ const quizObjects = quizes.map((quizData) => {
   return new Quiz(quizData);
 });
 
-let currentQuiz = 0;
-
-let currentQuizObj = quizObjects[currentQuiz];
 const quizSelectionItems = document.querySelectorAll(".quiz-sel-submenu li");
 const header_H1_El = document.querySelector(".welcome h1");
 const header_p_El = document.querySelector(".welcome p");
@@ -391,7 +290,7 @@ const displayResults = () => {
   tryAgainButtonEl.classList.add("try-again");
   tryAgainButtonEl.innerHTML = "Try again";
   tryAgainButtonEl.onclick = function () {
-    restartQuiz();
+    restartQuiz(currentQuiz);
   };
   resultsContainer.append(resultsHeader, resultsInfo, tryAgainButtonEl);
 
@@ -424,73 +323,14 @@ const checkAnswer = (id, answer) => {
   });
 };
 
-//event listeners
-function setAnswerListeners() {
-  const answerElements = document.querySelectorAll('[class*="answer"]');
-  answerElements.forEach((answerEl) => {
-    answerEl.addEventListener("click", function (event) {
-      console.log("click click");
-      let answer = answerEl.querySelector("h3").textContent;
-      let id = answerEl.id.slice(1);
-      checkAnswer(id, answer);
-      setTimeout(nextQuestion, 1000);
-    });
-  });
-}
-
-//Section dealing with page navigation
-function toggleSubmenu(thisValue, event) {
-  // const subMenu = thisValue.querySelector("ul");
-  const subMenu = document.querySelector(".quiz-sel-submenu");
-  if (subMenu.style.display === "block") {
-    subMenu.style.display = "none";
-  } else {
-    subMenu.style.display = "block";
-  }
-  event.stopPropagation();
-}
-
-const menuItems = document.querySelectorAll("nav ul li");
-for (var i = 0; i < menuItems.length; i++) {
-  if (menuItems[i].querySelector("ul")) {
-    menuItems[i].addEventListener("click", function (event) {
-      toggleSubmenu(this, event);
-    });
-  }
-}
-
-window.addEventListener("click", function (event) {
-  let submenu = document.querySelector(".quiz-sel-submenu");
-  if (submenu.style.display === "block" && !submenu.contains(event.target)) {
-    submenu.style.display = "none";
-  }
-});
-
-//Content management
-
-const loadQuiz = () => {
-  displayQuizHeader();
-  displayQuestion(currentQuizObj.currentQuestion);
-};
-
-quizSelectionItems.forEach((item, idx) => {
-  item.addEventListener("click", function () {
-    currentQuiz = idx;
-    currentQuizObj = quizObjects[currentQuiz];
-    currentQuizObj.restartQuiz();
-    restartQuiz();
-  });
-});
-
-function restartQuiz() {
+function restartQuiz(quizNo) {
+  currentQuiz = quizNo;
+  currentQuizObj = quizObjects[currentQuiz];
   currentQuizObj.restartQuiz();
   const quizEl = document.querySelector(".quiz");
   quizEl.innerHTML = "";
   quizEl.append(createQuestionContent());
   loadQuiz();
-  // displayQuestion(currentQuizObj.currentQuestion);
-  // debugger;
-  setAnswerListeners();
 }
 
 function createQuestionContent() {
@@ -529,7 +369,60 @@ function createQuestionContent() {
   });
   return questionContainer;
 }
-console.log(createQuestionContent());
 
-setAnswerListeners();
+const loadQuiz = () => {
+  displayQuizHeader();
+  displayQuestion(currentQuizObj.currentQuestion);
+  setAnswerListeners();
+};
+
+//event listeners
+function setAnswerListeners() {
+  const answerElements = document.querySelectorAll('[class*="answer"]');
+  answerElements.forEach((answerEl) => {
+    answerEl.addEventListener("click", function (event) {
+      let answer = answerEl.querySelector("h3").textContent;
+      let id = answerEl.id.slice(1);
+      checkAnswer(id, answer);
+      setTimeout(nextQuestion, 1000);
+    });
+  });
+}
+
+function toggleSubmenu(thisValue, event) {
+  // const subMenu = thisValue.querySelector("ul");
+  const subMenu = document.querySelector(".quiz-sel-submenu");
+  if (subMenu.style.display === "block") {
+    subMenu.style.display = "none";
+  } else {
+    subMenu.style.display = "block";
+  }
+  event.stopPropagation();
+}
+
+const menuItems = document.querySelectorAll("nav ul li");
+for (var i = 0; i < menuItems.length; i++) {
+  if (menuItems[i].querySelector("ul")) {
+    menuItems[i].addEventListener("click", function (event) {
+      toggleSubmenu(this, event);
+    });
+  }
+}
+
+window.addEventListener("click", function (event) {
+  let submenu = document.querySelector(".quiz-sel-submenu");
+  if (submenu.style.display === "block" && !submenu.contains(event.target)) {
+    submenu.style.display = "none";
+  }
+});
+
+quizSelectionItems.forEach((item, idx) => {
+  item.addEventListener("click", function () {
+    restartQuiz(idx);
+  });
+});
+
+//Load page for the first time
+let currentQuiz = 0;
+let currentQuizObj = quizObjects[currentQuiz];
 loadQuiz();
