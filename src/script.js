@@ -10,7 +10,7 @@ let currentQuizObj;
 async function loadAllQuizData() {
   const schema = {}; // JSON schema for validation
 
-  const dataFiles = await fetch("/data/")
+  const dataFiles = await fetch("../data/")
     .then((response) => response.text())
     .then((html) => {
       const parser = new DOMParser();
@@ -21,7 +21,7 @@ async function loadAllQuizData() {
     });
   const quizData = [];
   for (const file of dataFiles) {
-    const response = await fetch(`/data/${file}`);
+    const response = await fetch(`../data/${file}`);
     if (response.ok) {
       const jsonData = await response.json();
       // if (validateAgainstSchema(jsonData, schema)) {
