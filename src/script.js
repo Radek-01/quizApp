@@ -1,4 +1,62 @@
-"use strict";
+("use strict");
+
+//Get quiz data from json files
+
+let quizes = [];
+let quizObjects = [];
+let currentQuiz;
+let currentQuizObj;
+
+async function loadAllQuizData() {
+  const schema = {}; // JSON schema for validation
+
+  const dataFiles = await fetch("../data/")
+    .then((response) => response.text())
+    .then((html) => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+      return Array.from(doc.querySelectorAll("a"))
+        .filter((a) => a.href.endsWith(".json"))
+        .map((a) => a.href.split("/").pop());
+    });
+  const quizData = [];
+  for (const file of dataFiles) {
+    const response = await fetch(`../data/${file}`);
+    if (response.ok) {
+      const jsonData = await response.json();
+      // if (validateAgainstSchema(jsonData, schema)) {
+      //   loadedData.push(jsonData);
+      // } else {
+      //   console.error(`Error loading ${file}: data does not validate against schema`);
+      // }
+      quizData.push(jsonData);
+    } else {
+      console.error(
+        `Error loading ${file}: ${response.status} ${response.statusText}`
+      );
+    }
+  }
+
+  return quizData;
+}
+
+loadAllQuizData()
+  .then((data) => {
+    quizes = data;
+    quizObjects = quizes.map((quizData) => {
+      return new Quiz(quizData);
+    });
+    console.log(quizObjects[0]);
+    //Load page for the first time
+    currentQuiz = 0;
+    currentQuizObj = quizObjects[currentQuiz];
+    loadQuiz();
+  })
+  .catch((error) => {
+    console.error(error); // handle errors here
+  });
+
+//End get quiz ...
 
 const javascriptQuiz = {
   header: {
@@ -218,17 +276,121 @@ const englishQuiz = {
     },
   ],
 };
-const quizes = [javascriptQuiz, englishQuiz];
-const quizObjects = quizes.map((quizData) => {
-  return new Quiz(quizData);
-});
+const physicsQuiz = {
+  header: {
+    h1Text: "Sprawdź swoją wiedzę z fizyki",
+    pText:
+      "Odpowiedz na 10 pytań, aby sprawdzić swoją wiedzę z podstaw fizyki. Powodzenia!",
+  },
+  quizData: [
+    {
+      question: "Co to jest energia kinetyczna?",
+      answers: [
+        "Energia związana z ruchem",
+        "Energia związana z położeniem",
+        "Energia związana z temperaturą",
+        "Energia związana z dźwiękiem",
+      ],
+      correctAnswer: "Energia związana z ruchem",
+    },
+    {
+      question: "Jakie jest równanie siły?",
+      answers: ["F = m x a", "E = m x c²", "P = V x I", "E = F x d"],
+      correctAnswer: "F = m × a",
+    },
+    {
+      question: "Co to jest praca?",
+      answers: [
+        "Produkt siły i drogi, jaką przebywa ciało pod jej wpływem",
+        "Produkt siły i czasu, w którym działa",
+        "Produkt masy i przyspieszenia",
+        "Produkt natężenia prądu i czasu przepływu prądu",
+      ],
+      correctAnswer:
+        "Produkt siły i drogi, jaką przebywa ciało pod jej wpływem",
+    },
+    {
+      question: "Co to jest energia potencjalna?",
+      answers: [
+        "Energia związana z położeniem",
+        "Energia związana z ruchem",
+        "Energia związana z temperaturą",
+        "Energia związana z dźwiękiem",
+      ],
+      correctAnswer: "Energia związana z położeniem",
+    },
+    {
+      question: "Co to jest gęstość?",
+      answers: [
+        "Masa podzielona przez objętość",
+        "Masa pomnożona przez objętość",
+        "Masa plus objętość",
+        "Masa minus objętość",
+      ],
+      correctAnswer: "Masa podzielona przez objętość",
+    },
+    {
+      question: "Co to jest siła oporu?",
+      answers: [
+        "Siła hamująca ruch ciała w płynie lub gazie",
+        "Siła przyspieszająca ruch ciała",
+        "Siła przyciągająca ciała o masie",
+        "Siła odpychająca ciała o przeciwnych ładunkach elektrycznych",
+      ],
+      correctAnswer: "Siła hamująca ruch ciała w płynie lub gazie",
+    },
+    {
+      question: "Jakie są zasady dynamiki Newtona?",
+      answers: [
+        "Zasada bezwładności, zasada równoważenia sił, zasada akcji i reakcji",
+        "Zasada zachowania energii, zasada powszechności, zasada wewnętrznej energii",
+        "Zasada trzeciego prawka dynamiki, zasada przeciwieństwa czynników, zasada ciągłości",
+        "Zasada dwóch pierwszych praw Newtona, zasada przyspieszania, zasada ciągłości",
+      ],
+      correctAnswer:
+        "Zasada bezwładności, zasada równoważenia sił, zasada akcji i reakcji",
+    },
+    {
+      question: "Co to jest prąd elektryczny?",
+      answers: [
+        "Przepływ ładunków elektrycznych",
+        "Przepływ ciepła",
+        "Przepływ masy",
+        "Przepływ energii",
+      ],
+      correctAnswer: "Przepływ ładunków elektrycznych",
+    },
+    {
+      question: "Co to jest energia?",
+      answers: [
+        "Zdolność do wykonywania pracy",
+        "Materia",
+        "Cząstka elementarna",
+        "Fala elektromagnetyczna",
+      ],
+      correctAnswer: "Zdolność do wykonywania pracy",
+    },
+    {
+      question: "Co to jest pole magnetyczne?",
+      answers: [
+        "Obszar, w którym działają siły magnetyczne",
+        "Obszar, w którym działa grawitacja",
+        "Obszar, w którym działa elektromagnetyzm",
+        "Obszar, w którym działa siła ciężkości",
+      ],
+      correctAnswer: "Obszar, w którym działają siły magnetyczne",
+    },
+  ],
+};
 
-const quizSelectionItems = document.querySelectorAll(".quiz-sel-submenu li");
+// const quizes = [javascriptQuiz, englishQuiz, physicsQuiz];
+// const quizObjects = quizes.map((quizData) => {
+//   return new Quiz(quizData);
+// });
 
 const resetSelection = () => {
   const answerElements = document.querySelectorAll('[class*="answer"]');
   answerElements.forEach((element) => {
-    const elementh3 = element.querySelector("h3");
     element.classList.remove("clicked");
     element.classList.remove("answer_--correct");
     element.classList.remove("answer_--incorrect");
@@ -389,8 +551,7 @@ function setAnswerListeners() {
   });
 }
 
-function toggleSubmenu(thisValue, event) {
-  // const subMenu = thisValue.querySelector("ul");
+function openSubmenu(event) {
   const subMenu = document.querySelector(".quiz-sel-submenu");
   if (subMenu.style.display === "block") {
     subMenu.style.display = "none";
@@ -404,7 +565,7 @@ const menuItems = document.querySelectorAll("nav ul li");
 for (var i = 0; i < menuItems.length; i++) {
   if (menuItems[i].querySelector("ul")) {
     menuItems[i].addEventListener("click", function (event) {
-      toggleSubmenu(this, event);
+      openSubmenu(event);
     });
   }
 }
@@ -416,13 +577,28 @@ window.addEventListener("click", function (event) {
   }
 });
 
+const quizSelectionItems = document.querySelectorAll(".quiz-sel-submenu li");
 quizSelectionItems.forEach((item, idx) => {
   item.addEventListener("click", function () {
     restartQuiz(idx);
   });
 });
 
-//Load page for the first time
-let currentQuiz = 0;
-let currentQuizObj = quizObjects[currentQuiz];
-loadQuiz();
+const mainPageEl = document.querySelector(".homepage");
+mainPageEl.addEventListener("click", function () {
+  restartQuiz(0);
+});
+
+//temporary
+// function saveQuizData(obj, filename) {
+//   const jsonData = JSON.stringify(obj);
+//   const fileUrl = URL.createObjectURL(
+//     new Blob([jsonData], { type: "application/json" })
+//   );
+//   const downloadLink = document.createElement("a");
+//   downloadLink.href = fileUrl;
+//   downloadLink.download = `${filename}.json`;
+//   downloadLink.click();
+// }
+
+// saveQuizData(physicsQuiz, "quizSet3");

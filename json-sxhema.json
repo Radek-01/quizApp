@@ -1,0 +1,58 @@
+{
+  "header": {
+    "h1Text": "string",
+    "pText": "string"
+  },
+  "quizData": [
+    {
+      "question": "string",
+      "answers": ["string", "string", "string", "string"],
+      "correctAnswer": "string"
+    },
+    {
+      "question": "string",
+      "answers": ["string", "string", "string", "string"],
+      "correctAnswer": "string"
+    },
+    {
+      "question": "string",
+      "answers": ["string", "string", "string", "string"],
+      "correctAnswer": "string"
+    },
+    {
+      "question": "string",
+      "answers": ["string", "string", "string", "string"],
+      "correctAnswer": "string"
+    },
+    {
+      "question": "string",
+      "answers": ["string", "string", "string", "string"],
+      "correctAnswer": "string"
+    },
+    {
+      "question": "string",
+      "answers": ["string", "string", "string", "string"],
+      "correctAnswer": "string"
+    },
+    {
+      "question": "string",
+      "answers": ["string", "string", "string", "string"],
+      "correctAnswer": "string"
+    },
+    {
+      "question": "string",
+      "answers": ["string", "string", "string", "string"],
+      "correctAnswer": "string"
+    },
+    {
+      "question": "string",
+      "answers": ["string", "string", "string", "string"],
+      "correctAnswer": "string"
+    },
+    {
+      "question": "string",
+      "answers": ["string", "string", "string", "string"],
+      "correctAnswer": "string"
+    }
+  ]
+}
