@@ -2,9 +2,6 @@
 
 //Get quiz data from json files
 
-//test
-console.log("new version");
-
 let quizes = [];
 let quizObjects = [];
 let currentQuiz;
@@ -43,21 +40,21 @@ async function loadAllQuizData() {
   return quizData;
 }
 
-// loadAllQuizData()
-//   .then((data) => {
-//     quizes = data;
-//     quizObjects = quizes.map((quizData) => {
-//       return new Quiz(quizData);
-//     });
-//     console.log(quizObjects[0]);
-//     //Load page for the first time
-//     currentQuiz = 0;
-//     currentQuizObj = quizObjects[currentQuiz];
-//     loadQuiz();
-//   })
-//   .catch((error) => {
-//     console.error(error); // handle errors here
-//   });
+loadAllQuizData()
+  .then((data) => {
+    quizes = data;
+    quizObjects = quizes.map((quizData) => {
+      return new Quiz(quizData);
+    });
+    console.log(quizObjects[0]);
+    //Load page for the first time
+    currentQuiz = 0;
+    currentQuizObj = quizObjects[currentQuiz];
+    loadQuiz();
+  })
+  .catch((error) => {
+    console.error(error); // handle errors here
+  });
 
 //End get quiz ...
 
@@ -605,21 +602,71 @@ mainPageEl.addEventListener("click", function () {
 // }
 
 // saveQuizData(physicsQuiz, "quizSet3");
+// const promise = new Promise((resolve, reject) => {
+//   setTimeout(() => {
+//     resolve("Success!");
+//   }, 1000);
+// });
 
-async function getGitHubFile(owner, repo, path) {
-  let data = await fetch(
-    `https://api.github.com/repos/${owner}/${repo}/contents/${path}`
-  )
-    .then((d) => d.json())
-    .then((d) =>
-      fetch(`https://api.github.com/repos/${owner}/${repo}/git/blobs/${d.sha}`)
-    )
-    .then((d) => d.json())
-    .then((d) => JSON.parse(atob(d.content)));
+// promise
+//   .then((result) => {
+//     console.log(result);
+//   })
+//   .catch((error) => {
+//     console.error(error);
+//   });
 
-  return data;
+async function getFilesFromGit() {
+  const token = "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";
+  const owner = "Radek-01";
+  const repo = "quizApp";
+  const path = "data";
+
+  const response = await fetch(
+    `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
+    {
+      headers: {
+        Authorization: `token ${token}`,
+      },
+    }
+  );
+
+  const files = await response.json();
+
+  return new Promise((resolve, reject) => {
+    const fileNames = files.map((file) => file.name);
+    resolve(fileNames);
+  });
 }
 
-// getGitHubFile("Radek-01", "quizApp", "quizSet1.json").then((data) => {
-//   console.log("new fetch", data);
-// });
+getFilesFromGit()
+  .then((fileNames) => {
+    console.log(fileNames);
+    return fileNames;
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+
+async function getFilesFromGit() {
+  const token = "";
+  const owner = "";
+  const repo = "";
+  const path = "";
+
+  const response = await fetch(
+    `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
+    {
+      headers: {
+        Authorization: `token ${token}`,
+      },
+    }
+  );
+
+  const files = await response.json();
+
+  return new Promise((resolve, reject) => {
+    const fileNames = files.map((file) => file.name);
+    resolve(fileNames);
+  });
+}
