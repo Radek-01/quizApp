@@ -617,6 +617,6 @@ async function getGitHubFile(owner, repo, path) {
   return data;
 }
 
-getGitHubFile("Radek-01", "quizApp", "quizSet1.json").then((data) => {
-  console.log("new fetch", data);
-});
+// getGitHubFile("Radek-01", "quizApp", "quizSet1.json").then((data) => {
+//   console.log("new fetch", data);
+// });
