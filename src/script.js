@@ -630,8 +630,8 @@ async function getFilesFromGit() {
       },
     }
   );
-
-  const files = await response.json();
+  const json = await response.json();
+  const files = Array.isArray(json) ? json : [json];
 
   return new Promise((resolve, reject) => {
     const fileNames = files.map((file) => file.name);
