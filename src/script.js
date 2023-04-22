@@ -2,6 +2,9 @@
 
 //Get quiz data from json files
 
+//test
+console.log("new version");
+
 let quizes = [];
 let quizObjects = [];
 let currentQuiz;
