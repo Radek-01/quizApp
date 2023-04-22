@@ -647,26 +647,3 @@ getFilesFromGit()
   .catch((error) => {
     console.error(error);
   });
-
-async function getFilesFromGit() {
-  const token = "";
-  const owner = "";
-  const repo = "";
-  const path = "";
-
-  const response = await fetch(
-    `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
-    {
-      headers: {
-        Authorization: `token ${token}`,
-      },
-    }
-  );
-
-  const files = await response.json();
-
-  return new Promise((resolve, reject) => {
-    const fileNames = files.map((file) => file.name);
-    resolve(fileNames);
-  });
-}
