@@ -40,21 +40,21 @@ async function loadAllQuizData() {
   return quizData;
 }
 
-loadAllQuizData()
-  .then((data) => {
-    quizes = data;
-    quizObjects = quizes.map((quizData) => {
-      return new Quiz(quizData);
-    });
-    console.log(quizObjects[0]);
-    //Load page for the first time
-    currentQuiz = 0;
-    currentQuizObj = quizObjects[currentQuiz];
-    loadQuiz();
-  })
-  .catch((error) => {
-    console.error(error); // handle errors here
-  });
+// loadAllQuizData()
+//   .then((data) => {
+//     quizes = data;
+//     quizObjects = quizes.map((quizData) => {
+//       return new Quiz(quizData);
+//     });
+//     console.log(quizObjects[0]);
+//     //Load page for the first time
+//     currentQuiz = 0;
+//     currentQuizObj = quizObjects[currentQuiz];
+//     loadQuiz();
+//   })
+//   .catch((error) => {
+//     console.error(error); // handle errors here
+//   });
 
 //End get quiz ...
 
