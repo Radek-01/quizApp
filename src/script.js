@@ -7,38 +7,88 @@ let quizObjects = [];
 let currentQuiz;
 let currentQuizObj;
 
-async function loadAllQuizData() {
-  const schema = {}; // JSON schema for validation
+async function getFilesFromGit() {
+  const token = "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";
+  const owner = "Radek-01";
+  const repo = "quizApp";
+  const path = "data";
 
-  const dataFiles = await fetch("../data/")
-    .then((response) => response.text())
-    .then((html) => {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, "text/html");
-      return Array.from(doc.querySelectorAll("a"))
-        .filter((a) => a.href.endsWith(".json"))
-        .map((a) => a.href.split("/").pop());
-    });
-  const quizData = [];
-  for (const file of dataFiles) {
-    const response = await fetch(`../data/${file}`);
-    if (response.ok) {
-      const jsonData = await response.json();
-      // if (validateAgainstSchema(jsonData, schema)) {
-      //   loadedData.push(jsonData);
-      // } else {
-      //   console.error(`Error loading ${file}: data does not validate against schema`);
-      // }
-      quizData.push(jsonData);
-    } else {
-      console.error(
-        `Error loading ${file}: ${response.status} ${response.statusText}`
-      );
+  const response = await fetch(
+    `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
+    {
+      headers: {
+        Authorization: `token ${token}`,
+      },
     }
-  }
+  );
+  const json = await response.json();
+  const files = Array.isArray(json) ? json : [json];
 
-  return quizData;
+  const fileDataPromises = files.map(async (file) => {
+    if (file.type === "file") {
+      const fileResponse = await fetch(file.download_url, {
+        headers: {
+          Authorization: `token ${token}`,
+        },
+      });
+      const fileData = await fileResponse.json();
+      return fileData;
+    } else {
+      return null;
+    }
+  });
+
+  const fileData = await Promise.all(fileDataPromises);
+
+  return fileData.filter((data) => data !== null);
+
+  // return new Promise((resolve, reject) => {
+  //   const fileNames = files.map((file) => file.name);
+  //   resolve(fileNames);
+  // });
 }
+
+getFilesFromGit()
+  .then((fileNames) => {
+    console.log(fileNames);
+    return fileNames;
+  })
+  .catch((error) => {
+    console.error(error);
+  });
+
+// async function loadAllQuizData() {
+//   const schema = {}; // JSON schema for validation
+
+//   const dataFiles = await fetch("../data/")
+//     .then((response) => response.text())
+//     .then((html) => {
+//       const parser = new DOMParser();
+//       const doc = parser.parseFromString(html, "text/html");
+//       return Array.from(doc.querySelectorAll("a"))
+//         .filter((a) => a.href.endsWith(".json"))
+//         .map((a) => a.href.split("/").pop());
+//     });
+//   const quizData = [];
+//   for (const file of dataFiles) {
+//     const response = await fetch(`../data/${file}`);
+//     if (response.ok) {
+//       const jsonData = await response.json();
+//       // if (validateAgainstSchema(jsonData, schema)) {
+//       //   loadedData.push(jsonData);
+//       // } else {
+//       //   console.error(`Error loading ${file}: data does not validate against schema`);
+//       // }
+//       quizData.push(jsonData);
+//     } else {
+//       console.error(
+//         `Error loading ${file}: ${response.status} ${response.statusText}`
+//       );
+//     }
+//   }
+
+//   return quizData;
+// }
 
 // loadAllQuizData()
 //   .then((data) => {
@@ -615,35 +665,3 @@ mainPageEl.addEventListener("click", function () {
 //   .catch((error) => {
 //     console.error(error);
 //   });
-
-async function getFilesFromGit() {
-  const token = "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";
-  const owner = "Radek-01";
-  const repo = "quizApp";
-  const path = "data";
-
-  const response = await fetch(
-    `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
-    {
-      headers: {
-        Authorization: `token ${token}`,
-      },
-    }
-  );
-  const json = await response.json();
-  const files = Array.isArray(json) ? json : [json];
-
-  return new Promise((resolve, reject) => {
-    const fileNames = files.map((file) => file.name);
-    resolve(fileNames);
-  });
-}
-
-getFilesFromGit()
-  .then((fileNames) => {
-    console.log(fileNames);
-    return fileNames;
-  })
-  .catch((error) => {
-    console.error(error);
-  });
