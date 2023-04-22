@@ -8,7 +8,7 @@ let currentQuiz;
 let currentQuizObj;
 
 async function getFilesFromGit() {
-  const token = "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";
+  const token = "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";
   const owner = "Radek-01";
   const repo = "quizApp";
   const path = "data";
