@@ -617,7 +617,7 @@ mainPageEl.addEventListener("click", function () {
 //   });
 
 async function getFilesFromGit() {
-  const token = "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";
+  const token = "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";
   const owner = "Radek-01";
   const repo = "quizApp";
   const path = "data";
