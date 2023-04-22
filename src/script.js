@@ -40,21 +40,21 @@ async function loadAllQuizData() {
   return quizData;
 }
 
-loadAllQuizData()
-  .then((data) => {
-    quizes = data;
-    quizObjects = quizes.map((quizData) => {
-      return new Quiz(quizData);
-    });
-    console.log(quizObjects[0]);
-    //Load page for the first time
-    currentQuiz = 0;
-    currentQuizObj = quizObjects[currentQuiz];
-    loadQuiz();
-  })
-  .catch((error) => {
-    console.error(error); // handle errors here
-  });
+// loadAllQuizData()
+//   .then((data) => {
+//     quizes = data;
+//     quizObjects = quizes.map((quizData) => {
+//       return new Quiz(quizData);
+//     });
+//     console.log(quizObjects[0]);
+//     //Load page for the first time
+//     currentQuiz = 0;
+//     currentQuizObj = quizObjects[currentQuiz];
+//     loadQuiz();
+//   })
+//   .catch((error) => {
+//     console.error(error); // handle errors here
+//   });
 
 //End get quiz ...
 
@@ -602,3 +602,21 @@ mainPageEl.addEventListener("click", function () {
 // }
 
 // saveQuizData(physicsQuiz, "quizSet3");
+
+async function getGitHubFile(owner, repo, path) {
+  let data = await fetch(
+    `https://api.github.com/repos/${owner}/${repo}/contents/${path}`
+  )
+    .then((d) => d.json())
+    .then((d) =>
+      fetch(`https://api.github.com/repos/${owner}/${repo}/git/blobs/${d.sha}`)
+    )
+    .then((d) => d.json())
+    .then((d) => JSON.parse(atob(d.content)));
+
+  return data;
+}
+
+getGitHubFile("Radek-01", "quizApp", "/data/quizSet1.json").then((data) => {
+  console.log("new fetch", data);
+});
