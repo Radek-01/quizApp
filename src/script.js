@@ -17,7 +17,7 @@ let currentQuiz;
 let currentQuizObj;
 
 function readQuizFromJsonFiles() {
-  const folderPath = "../data/";
+  const folderPath = "..docs/data/";
   fetch(folderPath)
     .then((response) => response.text())
     .then((html) => {
