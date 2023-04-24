@@ -4,11 +4,10 @@
 if (window.location.hostname === "radek-01.github.io") {
   console.log("github");
   const { Octokit } = require("@octokit/core");
+  console.log(Octokit);
 } else {
   console.log("local server");
 }
-
-console.log(window.location.hostname);
 
 //Get quiz data from json files
 
