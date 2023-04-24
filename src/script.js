@@ -1,5 +1,14 @@
 ("use strict");
 
+//temporary
+// if (window.location.hostname === "YOUR_GITHUB_USERNAME.github.io") {
+//   console.log("github");
+// } else {
+//   console.log("local server");
+// }
+
+console.log(window.location.hostname);
+
 //Get quiz data from json files
 
 let quizes = [];
@@ -564,10 +573,3 @@ const mainPageEl = document.querySelector(".homepage");
 mainPageEl.addEventListener("click", function () {
   restartQuiz(0);
 });
-
-//temporary
-if (window.location.hostname === "YOUR_GITHUB_USERNAME.github.io") {
-  console.log("github");
-} else {
-  console.log("local server");
-}
