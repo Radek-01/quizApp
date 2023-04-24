@@ -7,106 +7,37 @@ let quizObjects = [];
 let currentQuiz;
 let currentQuizObj;
 
-async function getFilesFromGit() {
-  const token = "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";
-  const owner = "Radek-01";
-  const repo = "quizApp";
-  const path = "data";
-
-  const response = await fetch(
-    `https://api.github.com/repos/${owner}/${repo}/contents/${path}`,
-    {
-      headers: {
-        Authorization: `token ${token}`,
-      },
-    }
-  );
-  const json = await response.json();
-  const files = Array.isArray(json) ? json : [json];
-
-  const fileDataPromises = files.map(async (file) => {
-    if (file.type === "file") {
-      const fileResponse = await fetch(file.download_url, {
-        headers: {
-          Authorization: `token ${token}`,
-        },
+function readQuizFromJsonFiles() {
+  const folderPath = "../data/";
+  fetch(folderPath)
+    .then((response) => response.text())
+    .then((html) => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, "text/html");
+      const links = [...doc.querySelectorAll("a")];
+      const jsonFiles = links
+        .filter((link) => link.href.endsWith(".json"))
+        .map((link) => link.href);
+      return Promise.all(jsonFiles.map((file) => fetch(file)));
+    })
+    .then((responses) =>
+      Promise.all(responses.map((response) => response.text()))
+    )
+    .then((contents) => {
+      quizes = contents.map((content) => JSON.parse(content));
+      quizObjects = quizes.map((quizData) => {
+        return new Quiz(quizData);
       });
-      const fileData = await fileResponse.json();
-      return fileData;
-    } else {
-      return null;
-    }
-  });
-
-  const fileData = await Promise.all(fileDataPromises);
-
-  return fileData.filter((data) => data !== null);
-
-  // return new Promise((resolve, reject) => {
-  //   const fileNames = files.map((file) => file.name);
-  //   resolve(fileNames);
-  // });
+      currentQuiz = 0;
+      currentQuizObj = quizObjects[currentQuiz];
+      loadQuiz();
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
-getFilesFromGit()
-  .then((fileNames) => {
-    console.log(fileNames);
-    return fileNames;
-  })
-  .catch((error) => {
-    console.error(error);
-  });
-
-// async function loadAllQuizData() {
-//   const schema = {}; // JSON schema for validation
-
-//   const dataFiles = await fetch("../data/")
-//     .then((response) => response.text())
-//     .then((html) => {
-//       const parser = new DOMParser();
-//       const doc = parser.parseFromString(html, "text/html");
-//       return Array.from(doc.querySelectorAll("a"))
-//         .filter((a) => a.href.endsWith(".json"))
-//         .map((a) => a.href.split("/").pop());
-//     });
-//   const quizData = [];
-//   for (const file of dataFiles) {
-//     const response = await fetch(`../data/${file}`);
-//     if (response.ok) {
-//       const jsonData = await response.json();
-//       // if (validateAgainstSchema(jsonData, schema)) {
-//       //   loadedData.push(jsonData);
-//       // } else {
-//       //   console.error(`Error loading ${file}: data does not validate against schema`);
-//       // }
-//       quizData.push(jsonData);
-//     } else {
-//       console.error(
-//         `Error loading ${file}: ${response.status} ${response.statusText}`
-//       );
-//     }
-//   }
-
-//   return quizData;
-// }
-
-// loadAllQuizData()
-//   .then((data) => {
-//     quizes = data;
-//     quizObjects = quizes.map((quizData) => {
-//       return new Quiz(quizData);
-//     });
-//     console.log(quizObjects[0]);
-//     //Load page for the first time
-//     currentQuiz = 0;
-//     currentQuizObj = quizObjects[currentQuiz];
-//     loadQuiz();
-//   })
-//   .catch((error) => {
-//     console.error(error); // handle errors here
-//   });
-
-//End get quiz ...
+readQuizFromJsonFiles();
 
 const javascriptQuiz = {
   header: {
@@ -433,11 +364,6 @@ const physicsQuiz = {
   ],
 };
 
-// const quizes = [javascriptQuiz, englishQuiz, physicsQuiz];
-// const quizObjects = quizes.map((quizData) => {
-//   return new Quiz(quizData);
-// });
-
 const resetSelection = () => {
   const answerElements = document.querySelectorAll('[class*="answer"]');
   answerElements.forEach((element) => {
@@ -640,28 +566,3 @@ mainPageEl.addEventListener("click", function () {
 });
 
 //temporary
-// function saveQuizData(obj, filename) {
-//   const jsonData = JSON.stringify(obj);
-//   const fileUrl = URL.createObjectURL(
-//     new Blob([jsonData], { type: "application/json" })
-//   );
-//   const downloadLink = document.createElement("a");
-//   downloadLink.href = fileUrl;
-//   downloadLink.download = `${filename}.json`;
-//   downloadLink.click();
-// }
-
-// saveQuizData(physicsQuiz, "quizSet3");
-// const promise = new Promise((resolve, reject) => {
-//   setTimeout(() => {
-//     resolve("Success!");
-//   }, 1000);
-// });
-
-// promise
-//   .then((result) => {
-//     console.log(result);
-//   })
-//   .catch((error) => {
-//     console.error(error);
-//   });
