@@ -1,11 +1,11 @@
 ("use strict");
 
 //temporary
-// if (window.location.hostname === "YOUR_GITHUB_USERNAME.github.io") {
-//   console.log("github");
-// } else {
-//   console.log("local server");
-// }
+if (window.location.hostname === "radek-01.github.io") {
+  console.log("github");
+} else {
+  console.log("local server");
+}
 
 console.log(window.location.hostname);
 
