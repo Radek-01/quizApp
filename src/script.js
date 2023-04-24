@@ -566,3 +566,8 @@ mainPageEl.addEventListener("click", function () {
 });
 
 //temporary
+if (window.location.hostname === "YOUR_GITHUB_USERNAME.github.io") {
+  console.log("github");
+} else {
+  console.log("local server");
+}
