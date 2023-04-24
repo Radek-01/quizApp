@@ -3,6 +3,7 @@
 //temporary
 if (window.location.hostname === "radek-01.github.io") {
   console.log("github");
+  const { Octokit } = require("@octokit/core");
 } else {
   console.log("local server");
 }
